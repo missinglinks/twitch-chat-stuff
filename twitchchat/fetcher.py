@@ -22,7 +22,7 @@ class TwitchChatFetcher(object):
         while True:
             resp = requests.get(COMMENTS_URL.format(video_id=video_id, client_id=client_id, curor=cursor)) 
             resp = resp.json()
-            
+
             comments += resp["comments"]
             print("\r", end="")
             current_len = len(comments)
