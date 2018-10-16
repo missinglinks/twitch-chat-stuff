@@ -11,6 +11,26 @@ from collections import defaultdict, Counter
 from .utils import timestamp
 
 
+class MessageCorpus(object):
+
+    def __init__(self, comments):
+        self._comments = comments
+
+        self.corpus = [ c.message for c in comments ]
+        self.commenters = Counter([ c.commenter["name"] for c in comments])
+        self.emoticons = Counter()
+        for c in comments:
+            self.emoticons.update( [ str(x) for x in c.emoticons ] )
+
+    def stats(self):
+        comments_without_emoticons = 0
+        for c in self._comments:
+            if len(c.emoticons) == 0:
+                comments_without_emoticons += 1
+        print("Number of comments: {}".format(len(self._comments)))
+        print("Comments without emoticons: {}".format(comments_without_emoticons))
+        print("Comments without emoticons ratio: {}".format(comments_without_emoticons/len(self._comments)))
+
 class TwitchChat(object):
     
     def __init__(self, filepath):
@@ -50,6 +70,13 @@ class TwitchChat(object):
             badges.update( [ x["_id"] for x in c.badges ] )
         return badges
     
+    def message_corpus(self, start, stop):
+        corpus = []
+        for c in self.comments:
+            if c.offset_seconds >= start and c.offset_seconds <= stop:
+                corpus.append(c)
+        return MessageCorpus(corpus)
+
     def emoticons(self, info="link"):
         emoticons = Counter()
         for c in self.comments:
@@ -136,3 +163,6 @@ class Emoticon(object):
         self.id = data["emoticon"]["emoticon_id"]
         self.text = data["text"]
         self.link = self.EMOTE_URL.format(id=self.id)
+
+    def __str__(self):
+        return "{} [{}]".format(self.text, self.link)
