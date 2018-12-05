@@ -4,8 +4,8 @@ Tools for downloading and analysing chat logs from recorded Twitch.TV streams.
 
 ## Requirements
 
-Python 3.6
-Twitch.TV Client ID
+* Python 3.6
+* Twitch.TV Client ID
 
 ## Usage
 
