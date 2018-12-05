@@ -100,7 +100,7 @@ class TwitchChat(object):
         plt.xticks(tick, labels, rotation=90)
         plt.show()
         
-    def plot_emoticons(self, start=0, end=None, ticks=5000):
+    def plot_emoticons(self, start=0, end=None, ticks=5000, emote_filter=False):
         if not end:
             end = self.length 
             
@@ -108,7 +108,8 @@ class TwitchChat(object):
         for comment in self.comments:
             if comment.offset_seconds >= start and comment.offset_seconds <= end:
                 for emoticon in comment.emoticons:
-                    emoticons.append(comment.offset_seconds)
+                    if not emote_filter or emoticon.text in emote_filter:
+                        emoticons.append(comment.offset_seconds)
 
         start = math.floor(start/ticks)*ticks
         end = math.ceil(end/ticks)*ticks
