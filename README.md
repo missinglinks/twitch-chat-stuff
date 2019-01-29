@@ -19,10 +19,19 @@ Add config.py:
 CLIENT_ID = "your_client_id"
 ```
 
-Download chat log:
+Crate a text file with the video ids (each id in a new line).
+e.g.
+
+video_lists.txt
+```
+363729808
+364147483
+```
+
+Download chat log for the videos listed in the text file:
 
 ```
-$ python downloader.py <video_id>
+$ python downloader.py video_lists.txt
 ```
 
 ### Analysis tools
