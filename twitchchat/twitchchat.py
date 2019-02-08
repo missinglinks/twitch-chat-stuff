@@ -86,10 +86,16 @@ class TwitchChat(object):
                 emoticons.update( [ x.text for x in c.emoticons ] )
         return emoticons
     
-    def plot_messages(self, start=0, end=None, ticks=5000):
+    def plot_messages(self, start=0, end=None, ticks=5000, text_filter=False):
         if not end:
             end = self.length 
-        message_times = [ c.offset_seconds for c in self.comments if c.offset_seconds >= start and c.offset_seconds < end]
+
+        messages = []
+        for comment in self.comments:
+            if not text_filter or text_filter.lower() in comment.message.lower():
+                messages.append(comment)
+
+        message_times = [ c.offset_seconds for c in messages if c.offset_seconds >= start and c.offset_seconds < end]
         start = math.floor(start/ticks)*ticks
         end = math.ceil(end/ticks)*ticks
         plt.figure(figsize=(25,10))
