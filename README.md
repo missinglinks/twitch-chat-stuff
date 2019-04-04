@@ -39,6 +39,22 @@ $ python downloader.py video_lists.txt
 Example notebook:
 Twitch Chat Analysis.ipynb
 
+## Elasticsearch ingest
+
+Add elasticsearch server credentials to config.py:
+
+```
+ES_SERVER = "<user>:<pwd>@url.com:9200"
+```
+
+Load all twitch chat logs (.json dumps) in a directory into elasticsearch:
+
+```
+$ python es_ingest.py -d <directory>
+```
+
+
+
 ## License
 
 GPL-3.0
