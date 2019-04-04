@@ -77,13 +77,17 @@ class TwitchChat(object):
                 corpus.append(c)
         return MessageCorpus(corpus)
 
-    def emoticons(self, info="link"):
+    def emoticons(self, info="link", start=0, end=None):
+        if not end:
+            end = self.length 
         emoticons = Counter()
         for c in self.comments:
-            if info == "link":
-                emoticons.update( [ x.link for x in c.emoticons ] )
-            else:
-                emoticons.update( [ x.text for x in c.emoticons ] )
+            if c.offset_seconds >= start and c.offset_seconds <= end:
+
+                if info == "link":
+                    emoticons.update( [ x.link for x in c.emoticons ] )
+                else:
+                    emoticons.update( [ x.text for x in c.emoticons ] )
         return emoticons
     
     def plot_messages(self, start=0, end=None, ticks=5000, text_filter=False):
