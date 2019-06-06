@@ -1,6 +1,7 @@
 import json
 from elasticsearch import Elasticsearch, helpers
-
+import datetime
+import math
 
 def build_dataset(dataset_filepath):
 
@@ -45,7 +46,8 @@ def build_dataset(dataset_filepath):
             "badges": badges,
             "is_action": is_action,
             "state": state,
-            "source": source
+            "source": source,
+            "offset": str(datetime.timedelta(seconds=comment["content_offset_seconds"]))
         })
 
     return comments
@@ -69,19 +71,23 @@ def ingest(dataset_filepaths, es_server, reset=False):
 
     docs = []
 
+
     for dataset_filepath in dataset_filepaths:
         print(dataset_filepath)
         comments = build_dataset(dataset_filepath)
 
-        for comment in comments:
+        for i, comment in enumerate(comments):
             docs.append({
                 "_index": INDEX,
                 "_type": DOC_TYPE,
                 "_id": comment["id"],
                 "_source": comment
             })
-
-        helpers.bulk(es, docs)
+        
+            if i % 5000 == 0:
+                print("ingest chunk ... ", math.ceil(i/5000))
+                helpers.bulk(es, docs)
+                docs = []
 
         
 
