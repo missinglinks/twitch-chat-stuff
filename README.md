@@ -19,7 +19,7 @@ Add config.py:
 CLIENT_ID = "your_client_id"
 ```
 
-Crate a text file with the video ids (each id in a new line).
+Create a text file with the video ids (each id in a new line).
 e.g.
 
 video_lists.txt
